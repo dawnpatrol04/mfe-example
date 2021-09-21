@@ -1,0 +1,14 @@
+FROM node:latest AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /container
+# Cache and Install dependencies
+COPY package.json .
+# COPY yarn.lock .
+RUN yarn install
+# Copy container files
+COPY . .
+# Expose port
+EXPOSE 8080
+# Start the container
+CMD [ "yarn", "start" ]

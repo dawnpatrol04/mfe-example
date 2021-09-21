@@ -1,0 +1,84 @@
+version: "3.8"
+
+services:
+  auth:
+    container_name: auth
+    image: mfe/auth
+    hostname: auth
+    build:
+      context: "./packages/auth"
+      dockerfile: ./dockerfile
+    volumes:
+      - ./packages/auth:/auth
+    expose:
+      - "8082"
+    ports:
+      - "8082:8082"
+    # command: npm i webpack-dev-server -g
+    command: npm run start
+    networks:
+      services-network:
+        aliases:
+          - auth-network
+
+  container:
+    container_name: container
+    image: mfe/container
+    hostname: container
+    build:
+      context: ./packages/container
+      dockerfile: ./dockerfile
+    volumes:
+      - ./packages/container:/container
+    command: yarn start
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      services-network:
+        aliases:
+          - container-network
+
+  marketing:
+    container_name: marketing
+    image: mfe/marketing
+    hostname: marketing
+    build:
+      context: ./packages/marketing
+      dockerfile: ./dockerfile
+    volumes:
+      - ./packages/marketing:/marketing
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+    command: yarn start
+    networks:
+      services-network:
+        aliases:
+          - marketing-network
+
+  dashboard:
+    container_name: dashboard
+    image: mfe/dashboard
+    hostname: dashboard
+    build:
+      context: ./packages/dashboard
+      dockerfile: ./dockerfile
+    volumes:
+      - ./packages/dashboard:/dashboard
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
+    command: yarn start
+    networks:
+      services-network:
+        aliases:
+          - dashboard-network
+
+networks:
+  services-network:
+    name: services-network
+    driver: bridge

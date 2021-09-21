@@ -2,17 +2,20 @@ const { merge } = require('webpack-merge');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const commonConfig = require('./webpack.common');
 const packageJson = require('../package.json');
+const path = require('path');
 
 const devConfig = {
   mode: 'development',
   output: {
-    publicPath: 'http://localhost:8080/',
+    path: path.join(__dirname, 'public/')
   },
   devServer: {
     port: 8080,
     historyApiFallback: {
       index: 'index.html',
     },
+    disableHostCheck: true,
+    host: '0.0.0.0'
   },
   plugins: [
     new ModuleFederationPlugin({

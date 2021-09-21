@@ -1,0 +1,17 @@
+FROM node:14.16.1 AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /dashboard
+ENV PATH /dashboard/node_modules/.bin:$PATH
+# Cache and Install dependencies
+COPY package.json .
+# COPY yarn.lock .
+RUN yarn install
+COPY . .
+RUN npm rebuild node-sass
+# RUN yarn run build
+# Copy dashboard files
+# Expose port
+EXPOSE 8083
+# Start the dashboard
+CMD [ "yarn", "start" ]
